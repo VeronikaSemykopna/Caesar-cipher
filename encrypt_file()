@@ -1,0 +1,61 @@
+def encrypt_file(file_name, key):
+    with open(file_name, 'r') as file:
+        plaintext = file.read()
+    
+    encrypted_text = encrypt_text(plaintext, key)
+    
+    with open(f"encrypted_{file_name}", 'w') as file:
+        file.write(encrypted_text)
+    
+    print(f"File '{file_name}' encrypted successfully.")
+
+def decrypt_file(file_name, key):
+    with open(file_name, 'r') as file:
+        encrypted_text = file.read()
+    
+    decrypted_text = decrypt_text(encrypted_text, key)
+    
+    with open(f"decrypted_{file_name}", 'w') as file:
+        file.write(decrypted_text)
+    
+    print(f"File '{file_name}' decrypted successfully.")
+
+def encrypt_text(text, key):
+    encrypted_text = ""
+    for char in text:
+        if char.isalpha():
+            if char.isupper():
+                encrypted_char = chr((ord(char) - 65 + key) % 26 + 65)
+            else:
+                encrypted_char = chr((ord(char) - 97 + key) % 26 + 97)
+            encrypted_text += encrypted_char
+        else:
+            encrypted_text += char
+    return encrypted_text
+
+def decrypt_text(text, key):
+    decrypted_text = ""
+    for char in text:
+        if char.isalpha():
+            if char.isupper():
+                decrypted_char = chr((ord(char) - 65 - key) % 26 + 65)
+            else:
+                decrypted_char = chr((ord(char) - 97 - key) % 26 + 97)
+            decrypted_text += decrypted_char
+        else:
+            decrypted_text += char
+    return decrypted_text
+
+def main():
+    file_name = input("Enter the file name: ")
+    key = int(input("Enter the encryption/decryption key: "))
+    mode = input("Enter 'e' to encrypt or 'd' to decrypt: ")
+
+    if mode == 'e':
+        encrypt_file(file_name, key)
+    elif mode == 'd':
+        decrypt_file(file_name, key)
+    else:
+        print("Invalid mode. Please enter 'e' or 'd'.")
+
+main()
